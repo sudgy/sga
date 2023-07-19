@@ -90,16 +90,6 @@ struct BasisBlade {
     constexpr bool operator==(const BasisBlade&) const=default;
 };
 
-/* Finds the grade of a basis blade */
-consteval std::uint64_t basis_grade(std::uint64_t basis)
-{
-    auto result = 0UL;
-    for (std::uint8_t i = 0; i < 64U; ++i) {
-        if (basis & (1UL << i)) ++result;
-    }
-    return result;
-}
-
 template <
     scalar Scalar,
     auto metric,
@@ -196,7 +186,7 @@ class Multivector : public BasisBlade<Scalar, metric, bases>... {
             auto result = from_wrapper<[&]{
                 auto result = std::vector<std::uint64_t>();
                 result.reserve(sizeof...(bases));
-                ((basis_grade(bases) == grade ?
+                ((std::popcount(bases) == grade ?
                   (result.push_back(bases)) : void()), ...);
                 return result;
             }>();
@@ -354,7 +344,7 @@ class Multivector : public BasisBlade<Scalar, metric, bases>... {
         {
             auto result = *this;
             ((result.BB<bases>::coefficient *=
-              ((basis_grade(bases) / 2) % 2 ? -1 : 1)), ...);
+              ((std::popcount(bases) / 2) % 2 ? -1 : 1)), ...);
             return result;
         }
         constexpr Multivector operator~() const
@@ -365,7 +355,7 @@ class Multivector : public BasisBlade<Scalar, metric, bases>... {
         {
             auto result = *this;
             ((result.BB<bases>::coefficient *=
-              (basis_grade(bases) % 2 ? -1 : 1)), ...);
+              (std::popcount(bases) % 2 ? -1 : 1)), ...);
             return result;
         }
 
