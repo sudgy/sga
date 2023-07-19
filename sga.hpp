@@ -11,6 +11,15 @@
 
 constexpr unsigned int GC_max_dimension = 64;
 
+/* In this library, basis blades are represented using unsigned 64-bit integers.
+ * These integers represent bitmasks of what basis vectors are included.  For
+ * example, in a 4D algebra with basis vectors e1, e2, e3, and e4, the basis
+ * vectors would represent the numbers 1, 2, 4, and 8.  Then other basis
+ * multivectors would be some combination of these.  For example, 13 would
+ * represent the basis multivector e134, because 13 = 1 + 4 + 8.  All basis
+ * multivectors are assumed to be in lexicographic order.
+ */
+
 template <typename T>
 concept scalar = std::regular<T> and requires(const T& a, const T& b, T c) {
     {a + b} -> std::convertible_to<T>;
@@ -24,6 +33,7 @@ concept scalar = std::regular<T> and requires(const T& a, const T& b, T c) {
     {c = -1};
 };
 
+/* Calculates what sign the product of two basis multivectors needs to have */
 template <
     scalar Scalar,
     std::uint64_t blade1,
@@ -54,6 +64,7 @@ Scalar basis_blade_product_sign(const std::array<std::int8_t, N>& metric)
     else return 1;
 }
 
+/* Calculates what sign the dual of a basis multivector should be */
 template <std::size_t N>
 consteval int dual_sign(std::uint64_t b)
 {
