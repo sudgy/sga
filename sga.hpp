@@ -531,38 +531,40 @@ class Multivector : public BasisBlade<Scalar, metric, bases>... {
 };
 
 // Example usage
-constexpr auto metric = std::array<std::int8_t, 4>{0, 1, 1, 1};
+namespace sga_example {
+    constexpr auto metric = std::array<std::int8_t, 4>{0, 1, 1, 1};
 
-template <std::uint64_t... bases>
-using PGAMultivector = Multivector<double, metric, bases...>;
-using Scalar = PGAMultivector<0>;
-using Vector = PGAMultivector<1, 2, 4, 8>;
-using Bivector = PGAMultivector<3, 5, 6, 9, 10, 12>;
-using Trivector = PGAMultivector<7, 11, 13, 14>;
-using Quadvector = PGAMultivector<15>;
-constexpr auto e0 = Vector(1, 0, 0, 0);
-constexpr auto e1 = Vector(0, 1, 0, 0);
-constexpr auto e2 = Vector(0, 0, 1, 0);
-constexpr auto e3 = Vector(0, 0, 0, 1);
+    template <std::uint64_t... bases>
+    using PGAMultivector = Multivector<double, metric, bases...>;
+    using Scalar = PGAMultivector<0>;
+    using Vector = PGAMultivector<1, 2, 4, 8>;
+    using Bivector = PGAMultivector<3, 5, 6, 9, 10, 12>;
+    using Trivector = PGAMultivector<7, 11, 13, 14>;
+    using Quadvector = PGAMultivector<15>;
+    constexpr auto e0 = Vector(1, 0, 0, 0);
+    constexpr auto e1 = Vector(0, 1, 0, 0);
+    constexpr auto e2 = Vector(0, 0, 1, 0);
+    constexpr auto e3 = Vector(0, 0, 0, 1);
 
-constexpr std::array<Trivector, 4> plane_points(
-    Vector v,
-    Trivector center,
-    Trivector up
-)
-{
-    const auto axis = v | center;
-    const auto center2 = axis ^ v;
-    const auto up2 = (v | up) ^ v;
-    const auto vert = center2 & up2;
-    const auto perp1 = (vert | v).normalized();
-    const auto perp2 = (perp1 | axis).normalized();
-    return {
-        (perp1 + 5*e0) ^ (perp2 + 5*e0) ^ v,
-        (perp1 - 5*e0) ^ (perp2 + 5*e0) ^ v,
-        (perp1 - 5*e0) ^ (perp2 - 5*e0) ^ v,
-        (perp1 + 5*e0) ^ (perp2 - 5*e0) ^ v
-    };
+    constexpr std::array<Trivector, 4> plane_points(
+        Vector v,
+        Trivector center,
+        Trivector up
+    )
+    {
+        const auto axis = v | center;
+        const auto center2 = axis ^ v;
+        const auto up2 = (v | up) ^ v;
+        const auto vert = center2 & up2;
+        const auto perp1 = (vert | v).normalized();
+        const auto perp2 = (perp1 | axis).normalized();
+        return {
+            (perp1 + 5*e0) ^ (perp2 + 5*e0) ^ v,
+            (perp1 - 5*e0) ^ (perp2 + 5*e0) ^ v,
+            (perp1 - 5*e0) ^ (perp2 - 5*e0) ^ v,
+            (perp1 + 5*e0) ^ (perp2 - 5*e0) ^ v
+        };
+    }
 }
 
 #endif

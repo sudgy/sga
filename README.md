@@ -3,4 +3,4 @@ This is a C++ geometric algebra library intended to show how simple it is to cre
 
 This library is mainly intended for educational purposes.  While it should be decently efficient, know that it hasn't really been optimized to squeeze out every last drop of performance.  Also, some basic operations, such as `exp`, `log`, and a dedicated sandwich operator, are not present.
 
-If you do wish to use this library in your code, it's just a header-only library, so you can just put the header into your project.  The code is in the public domain so you can do what you wish with it.  The code uses many C++20 features, so you'll need a modern compiler to get it to work.
+If you do wish to use this library in your code, it's just a header-only library, so you can just put the header into your project.  The code is in the public domain so you can do what you wish with it.  The code uses many C++20 features, so you'll need a modern compiler to get it to work.  You'll probably want to remove the example usage at the bottom of the header.
